@@ -9,8 +9,8 @@ namespace MiniMap
         [SerializeField]
         private Image image;
 
-        private NodeWorld worldItem;
-        private MapItem map;
+        protected NodeWorld worldItem;
+        protected MapItem map;
 
         public void InitICON(NodeWorld worldItem, MapItem map)
         {

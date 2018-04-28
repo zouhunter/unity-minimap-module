@@ -1,58 +1,112 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 using UnityEngine.Events;
+using UnityEngine.Sprites;
+using UnityEngine.Scripting;
+using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
+using UnityEngine.Assertions.Must;
+using UnityEngine.Assertions.Comparers;
+using System.Collections;
 using System.Collections.Generic;
 namespace MiniMap
 {
-
-    public class MiniMapSystem : MonoBehaviour
+    public class MiniMapSystem
     {
-        public Transform mapParent;
-        [SerializeField]
-        private List<MapItem> mapList;
-        [SerializeField]
-        private List<Toggle> toggleList;
-        private MapItem mapCurrent { get { return mapList[currmapIndex]; } }
-        private int currmapIndex;
+        private List<MapItem> maps = new List<MapItem>();
+        private List<NodeWorld> nodes = new List<NodeWorld>();
 
-        void Awake(){
-            RegisterToggleSwitchEvent();
-        }
-
-        void RegisterToggleSwitchEvent()
+        private MiniMapSystem() { }
+        private static MiniMapSystem _instence;
+        public static MiniMapSystem Instence
         {
-            if (toggleList.Count != mapList.Count)
+            get
             {
-                Debug.LogError("区域数目和按扭数目不相同！");
-                return;
-            }
-
-            for (int i = 0; i < toggleList.Count; i++)
-            {
-                int index = i;
-                //手动点击切换地图
-                toggleList[i].onValueChanged.AddListener((x) => {
-                    if (x) SwitchMapByToggle(index);
-                });
+                if (_instence == null)
+                {
+                    _instence = new MiniMapSystem();
+                }
+                return _instence;
             }
         }
 
-        void SwitchMapByToggle(int floor)
+        /// <summary>
+        /// 注册地图
+        /// </summary>
+        /// <param name="map"></param>
+        public void Regist(MapItem map)
         {
-            currmapIndex = floor;
-            for (int i = 0; i < mapList.Count; i++) {
-                mapList[i].gameObject.SetActive(i == currmapIndex);
+            if(!maps.Contains(map))
+            {
+                maps.Add(map);
+
+                foreach (var node in nodes)
+                {
+                    if(node.mapKey == map.mapKey)
+                    {
+                        node.RegistNodeIcon(map);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 移除地图
+        /// </summary>
+        /// <param name="map"></param>
+        public void Remove(MapItem map)
+        {
+            if (maps.Contains(map))
+            {
+                maps.Remove(map);
+
+                foreach (var node in nodes)
+                {
+                    if (node.mapKey == map.mapKey)
+                    {
+                        node.RemoveNodeIcon(map);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 注释标记点
+        /// </summary>
+        /// <param name="node"></param>
+        public void Regist(NodeWorld node)
+        {
+            if (!nodes.Contains(node))
+            {
+                nodes.Add(node);
+
+                foreach (var map in maps)
+                {
+                    if(map.mapKey == node.mapKey)
+                    {
+                        node.RegistNodeIcon(map);
+                    }
+                }
             }
         }
 
-        public void SwitchMap(int floor)
+        /// <summary>
+        /// 移除标记点
+        /// </summary>
+        /// <param name="node"></param>
+        public void Remove(NodeWorld node)
         {
-            if (floor > 0 && floor < mapList.Count && currmapIndex != floor)
+            if (nodes.Contains(node))
             {
-                currmapIndex = floor;
-                toggleList[currmapIndex].isOn = true;
+                nodes.Remove(node);
+
+                foreach (var map in maps)
+                {
+                    if (map.mapKey == node.mapKey)
+                    {
+                        node.RemoveNodeIcon(map);
+                    }
+                }
             }
         }
     }
-
 }

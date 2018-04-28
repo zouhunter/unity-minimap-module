@@ -7,18 +7,7 @@ using UnityEditor;
 
 namespace MiniMap
 {
-    [CustomEditor(typeof(MapRegionRecorder))]
-    public class Drawer : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-            if (GUILayout.Button("RecordToMiniMap"))
-            {
-                ((MapRegionRecorder)target).RecordToMiniMap();
-            }
-        }
-    }
+
     public class MapRegionRecorder : MonoBehaviour
     {
         [Header("调节可视尺寸")]
@@ -27,7 +16,7 @@ namespace MiniMap
         public float halfx, harlz;
         [Range(-100, 100)]
         public float offsetx, offsetz;
-        Color GizmoColor = Color.blue;
+        public Color GizmoColor = Color.blue;
         private Vector3 size;
         private Vector3 pos;
         void OnDrawGizmos()
@@ -48,8 +37,8 @@ namespace MiniMap
         public MapItem miniMap;
         public void RecordToMiniMap()
         {
-            miniMap.worldSize = new Vector2(size.x,size.z) * 2;
-            miniMap.worldPos = new Vector2(pos.x,pos.z);
+            miniMap.worldSize = new Vector2(halfx, harlz) * 2;
+            miniMap.worldPos = new Vector2(offsetx, offsetz);
             UnityEditor.EditorUtility.SetDirty(miniMap);
         }
     }
