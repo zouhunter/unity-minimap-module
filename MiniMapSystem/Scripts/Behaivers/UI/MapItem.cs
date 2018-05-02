@@ -18,12 +18,12 @@ namespace MiniMap
         private Vector2 rectPos { get { return rect.transform.position; } }
         private Vector2 rectSize { get { return rect.sizeDelta * 0.5f; } }
 
-        void OnEnable()
+        void Awake()
         {
             MiniMapSystem.Instence.Regist(this);
         }
 
-        void OnDisable()
+        void OnDestroy()
         {
             MiniMapSystem.Instence.Remove(this);
         }

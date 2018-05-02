@@ -11,27 +11,26 @@ namespace MiniMap
         public Sprite icon;
 
         [SerializeField]
-        private List<int> _mapKeys = new List<int>();
-        public List<int> mapKeys { get { return _mapKeys; } }
+        private List<int> mapKeys = new List<int>();
         public Transform posHolder;
         public bool updatePos;
 
         [SerializeField]
         private NodeIcon iconPrefab;
         private float timer;
-        private float time = 3;
+        public float updateTime = 3;
         private Dictionary<MapItem, NodeIcon> mapDic = new Dictionary<MapItem, NodeIcon>();// nodeicon;
-        void OnEnable()
+        void Awake()
         {
             MiniMapSystem.Instence.Regist(this);
         }
-        void OnDisable()
+        void OnDestroy()
         {
             MiniMapSystem.Instence.Remove(this);
         }
         public void Update()
         {
-            if (updatePos && mapDic.Count > 0 && (timer += Time.deltaTime) > time)
+            if (updatePos && mapDic.Count > 0 && (timer += Time.deltaTime) > updateTime)
             {
                 timer = 0;
                 UpdateNodeIconsPos();
@@ -51,8 +50,25 @@ namespace MiniMap
         {
             if(mapDic.ContainsKey(map))
             {
+                var mapIcon = mapDic[map];
+                if(mapIcon != null && mapIcon.gameObject != null){
+                    Destroy(mapIcon.gameObject);
+                }
                 mapDic.Remove(map);
             }
+        }
+
+        public bool WillShowOnMap(int key)
+        {
+            if (mapKeys.Contains(key))
+            {
+                return true;
+            }
+            if(mapKeys.Count == 0)
+            {
+                return true;
+            }
+            return false;
         }
 
         private NodeIcon CreateNodeIcon(MapItem map)
