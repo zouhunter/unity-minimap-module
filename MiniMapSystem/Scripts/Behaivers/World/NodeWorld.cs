@@ -9,17 +9,18 @@ namespace MiniMap
     {
         public string itemInfo;
         public Sprite icon;
-
         [SerializeField]
         private List<int> mapKeys = new List<int>();
         public Transform posHolder;
-        public bool updatePos;
-
+        public bool updateIcon;
+        public bool updateIconRot;
         [SerializeField]
         private NodeIcon iconPrefab;
-        private float timer;
         public float updateTime = 3;
+
+        private float timer;
         private Dictionary<MapItem, NodeIcon> mapDic = new Dictionary<MapItem, NodeIcon>();// nodeicon;
+
         void Awake()
         {
             MiniMapSystem.Instence.Regist(this);
@@ -30,10 +31,10 @@ namespace MiniMap
         }
         public void Update()
         {
-            if (updatePos && mapDic.Count > 0 && (timer += Time.deltaTime) > updateTime)
+            if (updateIcon && mapDic.Count > 0 && (timer += Time.deltaTime) > updateTime)
             {
                 timer = 0;
-                UpdateNodeIconsPos();
+                UpdateNodeIcons();
             }
         }
 
@@ -43,7 +44,7 @@ namespace MiniMap
             {
                 mapDic.Add(map, CreateNodeIcon(map));
             }
-            UpdateNodeIconsPos();
+            UpdateNodeIcons();
         }
 
         public void RemoveNodeIcon(MapItem map)
@@ -79,13 +80,24 @@ namespace MiniMap
             return nodeicon;
         }
 
-        private void UpdateNodeIconsPos()
+        private void UpdateNodeIcons()
         {
             foreach (var item in mapDic)
             {
                 var map = item.Key;
                 var nodeicon = item.Value;
-                nodeicon.transform.position = map.GetUIPositon(posHolder.position);
+                if(nodeicon != null && nodeicon.gameObject != null)
+                {
+                    if (nodeicon.gameObject.activeInHierarchy)
+                    {
+                        nodeicon.transform.position = map.GetUIPositon(posHolder.position);
+                        if(updateIconRot)
+                        {
+                            nodeicon.transform.eulerAngles = new Vector3(0, 0, -transform.eulerAngles.y);
+                        }
+                    }
+                }
+              
             }
         }
 
