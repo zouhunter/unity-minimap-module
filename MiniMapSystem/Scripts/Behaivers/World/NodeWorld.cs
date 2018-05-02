@@ -11,8 +11,8 @@ namespace MiniMap
         public Sprite icon;
 
         [SerializeField]
-        private int _mapKey;
-        public int mapKey { get { return _mapKey; } }
+        private List<int> _mapKeys = new List<int>();
+        public List<int> mapKeys { get { return _mapKeys; } }
         public Transform posHolder;
         public bool updatePos;
 

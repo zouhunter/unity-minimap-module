@@ -43,7 +43,7 @@ namespace MiniMap
 
                 foreach (var node in nodes)
                 {
-                    if(node.mapKey == map.mapKey)
+                    if(node.mapKeys.Contains(map.mapKey))
                     {
                         node.RegistNodeIcon(map);
                     }
@@ -62,7 +62,7 @@ namespace MiniMap
 
                 foreach (var node in nodes)
                 {
-                    if (node.mapKey == map.mapKey)
+                    if (node.mapKeys.Contains(map.mapKey))
                     {
                         node.RemoveNodeIcon(map);
                     }
@@ -81,7 +81,7 @@ namespace MiniMap
 
                 foreach (var map in maps)
                 {
-                    if(map.mapKey == node.mapKey)
+                    if (node.mapKeys.Contains(map.mapKey))
                     {
                         node.RegistNodeIcon(map);
                     }
@@ -101,7 +101,7 @@ namespace MiniMap
 
                 foreach (var map in maps)
                 {
-                    if (map.mapKey == node.mapKey)
+                    if (node.mapKeys.Contains(map.mapKey))
                     {
                         node.RemoveNodeIcon(map);
                     }
