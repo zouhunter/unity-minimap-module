@@ -4,20 +4,24 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 namespace MiniMap
 {
+    [RequireComponent(typeof(Image))]
     public class NodeIcon : MonoBehaviour
     {
-        [SerializeField]
-        private Image image;
+        protected Image m_image;
 
         protected NodeWorld worldItem;
         protected MapItem map;
 
-        public void InitICON(NodeWorld worldItem, MapItem map)
+        protected virtual void Awake()
+        {
+            m_image = GetComponent<Image>();
+        }
+
+        public virtual void InitICON(NodeWorld worldItem, MapItem map)
         {
             this.map = map;
             this.worldItem = worldItem;
-            image.sprite = worldItem.icon;
-            transform.SetParent(map.GetIconParent(), false);
+            m_image.sprite = worldItem.icon;
         }
     }
 

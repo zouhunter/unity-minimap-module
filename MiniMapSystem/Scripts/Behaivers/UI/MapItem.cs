@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using System;
+
 namespace MiniMap
 {
     public class MapItem : MonoBehaviour
@@ -12,6 +14,8 @@ namespace MiniMap
 
         public Vector2 worldSize;
         public Vector2 worldPos;
+        public List<NodeIcon> iconPrefabs;
+
         [Header("中心对齐的icon父级")]
         public RectTransform rect;
 
@@ -37,10 +41,17 @@ namespace MiniMap
             Vector2 uipos = MinimapUtility.SwitchPos(worldPos, rectPos, worldSize, rectSize, new Vector2(pos.x, pos.z));
             return uipos;
         }
-
-        public Transform GetIconParent()
+        internal NodeIcon CreateIcon(string iconPrefabName)
         {
-            return transform;
+            var prefab = iconPrefabs.Find(x => x.name == iconPrefabName);
+            if (prefab == null && iconPrefabs.Count > 0)
+            {
+                prefab = iconPrefabs[0];
+            }
+            var icon = Instantiate(prefab);
+            icon.transform.SetParent(transform, false);
+            icon.gameObject.SetActive(true);
+            return icon;
         }
     }
 

@@ -7,15 +7,21 @@ namespace MiniMap
 {
     public class NodeWorld : MonoBehaviour
     {
+        [HideInInspector]
         public string itemInfo;
+        [HideInInspector]
         public Sprite icon;
-        [SerializeField]
+        [SerializeField][HideInInspector]
         private List<int> mapKeys = new List<int>();
+        [HideInInspector]
         public Transform posHolder;
+        [HideInInspector]
         public bool updateIcon;
+        [HideInInspector]
         public bool updateIconRot;
-        [SerializeField]
-        private NodeIcon iconPrefab;
+        [SerializeField][HideInInspector]
+        private string iconPrefab;
+        [HideInInspector]
         public float updateTime = 3;
 
         private float timer;
@@ -23,6 +29,7 @@ namespace MiniMap
 
         void Awake()
         {
+            if (posHolder == null) posHolder = transform;
             MiniMapSystem.Instence.Regist(this);
         }
         void OnDestroy()
@@ -40,8 +47,7 @@ namespace MiniMap
 
         public void RegistNodeIcon(MapItem map)
         {
-            if(!mapDic.ContainsKey(map))
-            {
+            if(!mapDic.ContainsKey(map)){
                 mapDic.Add(map, CreateNodeIcon(map));
             }
             UpdateNodeIcons();
@@ -74,7 +80,7 @@ namespace MiniMap
 
         private NodeIcon CreateNodeIcon(MapItem map)
         {
-            var nodeicon = Instantiate(iconPrefab);
+            var nodeicon = map.CreateIcon(iconPrefab);
             nodeicon.InitICON(this, map);
             nodeicon.transform.position = map.GetUIPositon(posHolder.position);
             return nodeicon;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace MiniMap
 {
 
-    [CustomEditor(typeof(NodeWorld))]
+    [CustomEditor(typeof(NodeWorld), true)]
     public class NodeWorldDrawer : Editor
     {
         SerializedProperty script;
@@ -36,9 +36,8 @@ namespace MiniMap
         }
         public override void OnInspectorGUI()
         {
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.PropertyField(script);
-            EditorGUI.EndDisabledGroup();
+            base.OnInspectorGUI();
+
             serializedObject.Update();
             EditorGUILayout.PropertyField(itemInfo);
             EditorGUILayout.PropertyField(iconPrefab);
@@ -51,8 +50,8 @@ namespace MiniMap
                 EditorGUILayout.PropertyField(updateTime);
                 EditorGUILayout.PropertyField(updateIconRot);
             }
-
             serializedObject.ApplyModifiedProperties();
+
         }
     }
 }
