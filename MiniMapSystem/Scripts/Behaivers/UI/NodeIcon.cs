@@ -22,6 +22,7 @@ namespace MiniMap
             this.map = map;
             this.worldItem = worldItem;
             m_image.sprite = worldItem.icon;
+            m_image.color = worldItem.color;
         }
     }
 

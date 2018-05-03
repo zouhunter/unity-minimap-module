@@ -7,20 +7,19 @@ namespace MiniMap
 {
     public class NodeWorld : MonoBehaviour
     {
-        [HideInInspector]
+        [SerializeField]
+        private string iconPrefab;
         public string itemInfo;
-        [HideInInspector]
         public Sprite icon;
-        [SerializeField][HideInInspector]
+        public Color color = Color.white;
+        [SerializeField]
         private List<int> mapKeys = new List<int>();
-        [HideInInspector]
         public Transform posHolder;
         [HideInInspector]
         public bool updateIcon;
         [HideInInspector]
         public bool updateIconRot;
-        [SerializeField][HideInInspector]
-        private string iconPrefab;
+    
         [HideInInspector]
         public float updateTime = 3;
 
