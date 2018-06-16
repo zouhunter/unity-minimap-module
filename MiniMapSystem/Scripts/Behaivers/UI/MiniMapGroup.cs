@@ -13,15 +13,17 @@ namespace MiniMap
         private Transform mapParent;
         [SerializeField]
         private List<MapItem> mapList;
+        [SerializeField]
+        private int currmapIndex;
 
         private MapItem mapCurrent { get { return mapList[currmapIndex]; } }
-        private int currmapIndex;
+       
 
         void Awake(){
             selector.InitSelector(mapList.Count, SwitchMapByToggle);
+            selector.SetState(currmapIndex,true);
         }
 
-    
         private void SwitchMapByToggle(int floor)
         {
             currmapIndex = floor;
@@ -33,10 +35,10 @@ namespace MiniMap
 
         public void SwitchMap(int floor)
         {
-            if (floor > 0 && floor < mapList.Count && currmapIndex != floor)
+            if (floor >= 0 && floor < mapList.Count && currmapIndex != floor)
             {
                 currmapIndex = floor;
-                selector.SetState(currmapIndex);
+                selector.SetState(currmapIndex,true);
             }
         }
     }

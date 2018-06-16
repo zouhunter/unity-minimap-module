@@ -23,15 +23,30 @@ namespace MiniMap
                 int index = i;
                 //手动点击切换地图
                 toggleList[i].onValueChanged.AddListener((x) => {
-                    if (x && onSelect != null && !isSetting) onSelect(index);
+                    if (x && onSelect != null && !isSetting)
+                        onSelect(index);
                 });
             }
         }
-        public override void SetState(int currmapIndex)
+        public override void SetState(int currmapIndex,bool trigger)
         {
-            isSetting = true;
-            toggleList[currmapIndex].isOn = true;
-            isSetting = false;
+            if(trigger)
+            {
+                if (!toggleList[currmapIndex].isOn)
+                {
+                    toggleList[currmapIndex].isOn = true;
+                }
+                else
+                {
+                    toggleList[currmapIndex].onValueChanged.Invoke(true);
+                }
+            }
+            else
+            {
+                isSetting = true;
+                toggleList[currmapIndex].isOn = true;
+                isSetting = false;
+            }
         }
     }
    

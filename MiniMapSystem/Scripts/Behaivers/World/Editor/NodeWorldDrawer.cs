@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace MiniMap
 {
 
-    [CustomEditor(typeof(NodeWorld), true)]
+    [CustomEditor(typeof(NodeWorld), true),CanEditMultipleObjects]
     public class NodeWorldDrawer : Editor
     {
         SerializedProperty updateTime;

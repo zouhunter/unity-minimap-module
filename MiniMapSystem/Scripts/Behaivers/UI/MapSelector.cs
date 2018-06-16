@@ -17,6 +17,6 @@ namespace MiniMap
     public abstract class MapSelector : MonoBehaviour
     {
         public abstract void InitSelector(int mapCount, UnityAction<int> onSelect);
-        public abstract void SetState(int currmapIndex);
+        public abstract void SetState(int currmapIndex,bool trigger);
     }
 }

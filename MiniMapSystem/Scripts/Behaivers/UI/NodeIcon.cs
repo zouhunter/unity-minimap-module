@@ -12,17 +12,14 @@ namespace MiniMap
         protected NodeWorld worldItem;
         protected MapItem map;
 
-        protected virtual void Awake()
-        {
-            m_image = GetComponent<Image>();
-        }
-
         public virtual void InitICON(NodeWorld worldItem, MapItem map)
         {
             this.map = map;
             this.worldItem = worldItem;
+            m_image = GetComponent<Image>();
             m_image.sprite = worldItem.icon;
             m_image.color = worldItem.color;
+            gameObject.SetActive(worldItem.gameObject.activeSelf);
         }
     }
 

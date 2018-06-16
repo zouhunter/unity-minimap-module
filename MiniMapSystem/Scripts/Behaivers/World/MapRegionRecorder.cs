@@ -16,7 +16,9 @@ namespace MiniMap
         public float halfx, harlz;
         [Range(-100, 100)]
         public float offsetx, offsetz;
+
         public Color GizmoColor = Color.blue;
+       
         private Vector3 size;
         private Vector3 pos;
         void OnDrawGizmos()
@@ -39,6 +41,10 @@ namespace MiniMap
         {
             miniMap.worldSize = new Vector2(halfx, harlz) * 2;
             miniMap.worldPos = new Vector2(offsetx, offsetz);
+            //if (reverse)
+            //{
+            //    miniMap.worldSize = -miniMap.worldSize;
+            //}
             UnityEditor.EditorUtility.SetDirty(miniMap);
         }
     }
