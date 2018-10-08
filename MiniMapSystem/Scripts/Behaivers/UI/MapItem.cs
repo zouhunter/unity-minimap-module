@@ -21,7 +21,7 @@ namespace MiniMap
 
         private Vector2 rectPos { get { return rect.transform.position; } }
         private Vector2 rectSize { get { return rect.sizeDelta; } }
-
+        private CanvasScaler canvasScaler;
         void Awake()
         {
             MiniMapSystem.Instence.Regist(this);
@@ -39,8 +39,9 @@ namespace MiniMap
         public Vector3 GetUIPositon(Vector3 wpos)
         {
             var pos = new Vector2(wpos.x, wpos.z);
-            if(reverse){
-              pos = worldPos * 2 - pos;
+            if (reverse)
+            {
+                pos = worldPos * 2 - pos;
             }
 
             Vector2 uipos = MinimapUtility.SwitchPos(worldPos, rectPos, worldSize, rectSize, pos);
@@ -51,11 +52,12 @@ namespace MiniMap
         {
             if (reverse)
             {
-                pos = rectPos * 2  - pos;
+                pos = rectPos * 2 - pos;
             }
+            var newRectSize = WorpRectSize(rectSize);
+            var targetPos = MinimapUtility.SwitchPos(rectPos, worldPos, newRectSize, worldSize, pos);
 
-            var targetPos = MinimapUtility.SwitchPos(rectPos, worldPos, rectSize, worldSize, pos);
-            return  new Vector3(targetPos.x,0,targetPos.y) * 2;
+            return new Vector3(targetPos.x, 0, targetPos.y);
         }
 
         public bool Contains(Vector3 wpos)
@@ -90,6 +92,20 @@ namespace MiniMap
             icon.transform.SetParent(transform, false);
             icon.gameObject.SetActive(true);
             return icon;
+        }
+
+        private Vector2 WorpRectSize(Vector2 rectSize)
+        {
+            if (canvasScaler == null)
+                canvasScaler = GetComponentInParent<CanvasScaler>();
+            if (canvasScaler == null) return rectSize;
+
+            if (canvasScaler.uiScaleMode == CanvasScaler.ScaleMode.ScaleWithScreenSize)
+            {
+                rectSize = rectSize * ((Screen.width / canvasScaler.referenceResolution.x) *(1 - canvasScaler.matchWidthOrHeight) + 
+                    (canvasScaler.matchWidthOrHeight) *((Screen.height /canvasScaler.referenceResolution.y)));
+            }
+            return rectSize;
         }
     }
 
